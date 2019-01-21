@@ -1,0 +1,74 @@
+server:
+  port: ${hostconfig.config.port}
+spring:
+  application:
+    #向注册中心注册时的应用名
+    name: sales-management
+  cloud:
+    config:
+#      本服务取配置中心的值test/dev
+      profile: test
+      label: master
+      discovery:
+        enabled: true
+#        统一配置中心的服务名称
+        service-id: spring-cloud-config
+    bus:
+      refresh:
+        enabled: true
+  kafka:
+      bootstrap-servers: ${hostconfig.kafkaserver.host}:${hostconfig.kafkaserver.port}
+  
+    
+#主机配置
+#######################变动区域start
+hostconfig:
+#  注册中心地址
+  registry01.host: 10.1.4.69
+#  registry01.host: 10.1.4.162
+
+#  注册中心端口号
+  registry01.port: 8000
+#  本服务的ip地址
+  config.host: 10.3.1.185
+#  config.host: 10.1.4.68
+#  config.host: 10.1.4.167
+#  config.host: 10.1.4.168
+#  应用服务端口从8081依次往下排序，组件服务端口从8001依次往下排序
+  config.port: 8087
+#  统一消息总线地址和端口号
+  kafkaserver.host: 10.1.4.69
+  kafkaserver.port: 9092
+#######################变动区域end
+
+eureka:
+  instance:
+    #hostname: ${hostconfig.config.host}
+    prefer-ip-address: true
+    ip-address: ${hostconfig.config.host}
+  client:
+    service-url:
+      #单机模式
+      defaultZone: http://${hostconfig.registry01.host}:${hostconfig.registry01.port}/eureka/
+
+
+#控制台打印sql
+logging:
+  level:
+    com:
+      chinacoal:
+        commcoal:
+          mapper: info
+          
+#mybatis配置
+mybatis:
+  mybatisConfigFilePath: config/mybatis-config.xml
+  mapperPath: /mapper/**.xml
+  entityPackage: com/sinosoft/commxg/dto
+  
+#pagehelper配置
+pagehelper:
+  offsetAsPageNum: true
+  rowBoundsWithCount: true
+
+

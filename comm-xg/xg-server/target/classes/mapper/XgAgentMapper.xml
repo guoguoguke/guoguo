@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.commxg.dao.XgAgentMapper">
+  <resultMap id="XgAgentResultMap" type="com.sinosoft.commxg.dto.XgAgent">
+    <result column="AGENTCODE" jdbcType="VARCHAR" property="agentcode" />
+    <result column="AGENTNAME" jdbcType="VARCHAR" property="agentname" />
+    <result column="AGENTCLASS" jdbcType="VARCHAR" property="agentclass" />
+    <result column="ZG_PERMITNO" jdbcType="VARCHAR" property="zgPermitno" />
+    <result column="ZG_STARTDATE" jdbcType="TIMESTAMP" property="zgStartdate" />
+    <result column="ZG_ENDDATE" jdbcType="TIMESTAMP" property="zgEnddate" />
+    <result column="ZY_PERMITNO" jdbcType="VARCHAR" property="zyPermitno" />
+    <result column="ZY_STARTDATE" jdbcType="TIMESTAMP" property="zyStartdate" />
+    <result column="ZY_ENDDATE" jdbcType="TIMESTAMP" property="zyEnddate" />
+    <result column="SF_PERMITNO" jdbcType="VARCHAR" property="sfPermitno" />
+    <result column="SF_STARTDATE" jdbcType="TIMESTAMP" property="sfStartdate" />
+    <result column="SF_ENDDATE" jdbcType="TIMESTAMP" property="sfEnddate" />
+    <result column="BRITHDAY" jdbcType="TIMESTAMP" property="brithday" />
+    <result column="SEX" jdbcType="VARCHAR" property="sex" />
+    <result column="EDUCATIONEXPERIENCE" jdbcType="VARCHAR" property="educationexperience" />
+    <result column="PHONENUMBER" jdbcType="VARCHAR" property="phonenumber" />
+    <result column="POSTCODE" jdbcType="VARCHAR" property="postcode" />
+    <result column="ADDRESSNAME" jdbcType="VARCHAR" property="addressname" />
+    <result column="NETADDRESS" jdbcType="VARCHAR" property="netaddress" />
+    <result column="COMCODE" jdbcType="VARCHAR" property="comcode" />
+    <result column="COMCNAME" jdbcType="VARCHAR" property="comcname" />
+    <result column="HANDLERCODE" jdbcType="VARCHAR" property="handlercode" />
+    <result column="ISPRIVATE" jdbcType="VARCHAR" property="isprivate" />
+    <result column="RECBANK1" jdbcType="VARCHAR" property="recbank1" />
+    <result column="RECBANKNAME1" jdbcType="VARCHAR" property="recbankname1" />
+    <result column="BANKAREACODE" jdbcType="VARCHAR" property="bankareacode" />
+    <result column="BANKAREANAME" jdbcType="VARCHAR" property="bankareaname" />
+    <result column="RECACCOUNT" jdbcType="VARCHAR" property="recaccount" />
+    <result column="RECACCOUNTNAME" jdbcType="VARCHAR" property="recaccountname" />
+    <result column="VALIDSTATUS" jdbcType="VARCHAR" property="validstatus" />
+    <result column="HANDLERNAME" jdbcType="VARCHAR" property="handlername" />
+  </resultMap>
+  <select id="selectByParam" parameterType="com.sinosoft.commxg.param.XgAgentParam" resultMap="XgAgentResultMap">
+    
+	select * from xg_agent a where 1=1
+
+
+     <if test="comcode != null and comcode != ''">
+       and a.comcode  in (select comcode
+                     from SaCompany
+                    start with comcode = #{comcode}
+                   connect by prior comcode = uppercomcode
+                          and prior comcode != comcode)
+     </if>
+  	<if test="agentcode != null and agentcode != ''">
+       and a.agentcode=  #{agentcode}
+     </if>
+     <if test="agentname != null and agentname != ''">
+       and a.agentname like '%'||#{agentname}||'%'
+     </if>
+  	<if test="agentclass != null and agentclass != ''">
+       and a.agentclass=  #{agentclass}
+     </if>    
+    <if test="validstatus != null and validstatus != ''">
+       and a.validstatus=  #{validstatus}
+     </if>    
+     <if test="sfPermitno != null and sfPermitno != ''">
+       and a.sf_permitno #{sfPermitno}
+     </if>
+  	<if test="zgPermitno != null and zgPermitno != ''">
+       and a.zg_permitno=  #{zgPermitno}
+     </if>    
+  </select>
+</mapper>

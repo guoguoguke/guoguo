@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.commxg.dao.XgWageMapper">
+  <resultMap id="XgWageResultMap" type="com.sinosoft.commxg.dto.XgWage">
+    <result column="USERCODE" jdbcType="VARCHAR" property="usercode" />
+    <result column="CALCDATE" jdbcType="VARCHAR" property="calcdate" />
+    <result column="COMCODE" jdbcType="VARCHAR" property="comcode" />
+    <result column="COMNAME" jdbcType="VARCHAR" property="comname" />
+    <result column="TEAMCODE" jdbcType="VARCHAR" property="teamcode" />
+    <result column="TEAMNAME" jdbcType="VARCHAR" property="teamname" />
+    <result column="TEAMLEVELID" jdbcType="VARCHAR" property="teamlevelid" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="USERGW" jdbcType="VARCHAR" property="usergw" />
+    <result column="INDEXNO" jdbcType="VARCHAR" property="indexno" />
+    <result column="INDEXVALUE" jdbcType="VARCHAR" property="indexvalue" />
+    <result column="SAWAG0002" jdbcType="DECIMAL" property="sawag0002" />
+    <result column="WAG0027" jdbcType="DECIMAL" property="wag0027" />
+    <result column="SAWAG0007" jdbcType="DECIMAL" property="sawag0007" />
+    <result column="SAWAG0089" jdbcType="DECIMAL" property="sawag0089" />
+    <result column="SAWAG0109" jdbcType="DECIMAL" property="sawag0109" />
+    <result column="SAWAG0012" jdbcType="DECIMAL" property="sawag0012" />
+    <result column="SAWAG0013" jdbcType="DECIMAL" property="sawag0013" />
+    <result column="SAWAG0014" jdbcType="DECIMAL" property="sawag0014" />
+    <result column="SAWAG0015" jdbcType="DECIMAL" property="sawag0015" />
+    <result column="SAWAG0016" jdbcType="DECIMAL" property="sawag0016" />
+    <result column="SAWAG0017" jdbcType="DECIMAL" property="sawag0017" />
+    <result column="SAWAG0019" jdbcType="DECIMAL" property="sawag0019" />
+    <result column="SAWAG0020" jdbcType="DECIMAL" property="sawag0020" />
+    <result column="SAWAG0021" jdbcType="DECIMAL" property="sawag0021" />
+    <result column="SAWAG0022" jdbcType="DECIMAL" property="sawag0022" />
+    <result column="SAWAG0025" jdbcType="DECIMAL" property="sawag0025" />
+    <result column="SAWAG0026" jdbcType="DECIMAL" property="sawag0026" />
+    <result column="SAWAG0027" jdbcType="DECIMAL" property="sawag0027" />
+    <result column="SAWAG0028" jdbcType="DECIMAL" property="sawag0028" />
+    <result column="SAWAG0029" jdbcType="DECIMAL" property="sawag0029" />
+    <result column="SAWAG0030" jdbcType="DECIMAL" property="sawag0030" />
+    <result column="SAWAG0031" jdbcType="DECIMAL" property="sawag0031" />
+    <result column="SAWAG0032" jdbcType="DECIMAL" property="sawag0032" />
+    <result column="SAWAG0033" jdbcType="DECIMAL" property="sawag0033" />
+    <result column="SAWAG0034" jdbcType="DECIMAL" property="sawag0034" />
+    <result column="WAG0003" jdbcType="DECIMAL" property="wag0003" />
+    <result column="WAG0006" jdbcType="DECIMAL" property="wag0006" />
+    <result column="WAG0007" jdbcType="DECIMAL" property="wag0007" />
+    <result column="WAG0008" jdbcType="DECIMAL" property="wag0008" />
+    <result column="WAG0009" jdbcType="DECIMAL" property="wag0009" />
+    <result column="WAG0011" jdbcType="DECIMAL" property="wag0011" />
+    <result column="WAG0012" jdbcType="DECIMAL" property="wag0012" />
+    <result column="WAG0013" jdbcType="DECIMAL" property="wag0013" />
+    <result column="WAG0014" jdbcType="DECIMAL" property="wag0014" />
+    <result column="WAG0015" jdbcType="DECIMAL" property="wag0015" />
+    <result column="WAG0016" jdbcType="DECIMAL" property="wag0016" />
+    <result column="WAG0017" jdbcType="DECIMAL" property="wag0017" />
+    <result column="WAG0018" jdbcType="DECIMAL" property="wag0018" />
+    <result column="WAG0020" jdbcType="DECIMAL" property="wag0020" />
+    <result column="WAG0021" jdbcType="DECIMAL" property="wag0021" />
+    <result column="WAG0022" jdbcType="DECIMAL" property="wag0022" />
+    <result column="WAG0023" jdbcType="DECIMAL" property="wag0023" />
+    <result column="WAG0024" jdbcType="DECIMAL" property="wag0024" />
+    <result column="WAG0025" jdbcType="DECIMAL" property="wag0025" />
+    <result column="WAG0029" jdbcType="DECIMAL" property="wag0029" />
+    <result column="WAG0030" jdbcType="DECIMAL" property="wag0030" />
+    <result column="WAG0031" jdbcType="DECIMAL" property="wag0031" />
+    <result column="SAWAG0104" jdbcType="DECIMAL" property="sawag0104" />
+    <result column="SAWAG0102" jdbcType="DECIMAL" property="sawag0102" />
+    <result column="SAWAG0200" jdbcType="DECIMAL" property="sawag0200" />
+  </resultMap>
+<!-- 查询人员薪酬列表 -->
+ <select id="selectByParam" parameterType="com.sinosoft.commxg.param.XgWageParam" resultMap="XgWageResultMap">
+    SELECT sauser.UserCode,
+	       sauser.username,
+	       (select comcname from sacompany where comcode =substr(d.comcode, 1, 2)) as upcode2,
+	       d.comcode,
+	       (select rolename
+	          from sarole aa
+	         where aa.roleid in
+	               (select tt.roleid
+	                  from SAUSERROLERELATION tt
+	                 where tt.usercode = b.usercode
+	                   and B.Startdate between tt.startdate and
+	                       nvl(tt.enddate, date '9999-12-31'))
+	           and aa.baselowno = e.baselowno) as userGW,
+
+	       (select distinct teamlevelname  from sateamlevel where teamlevelid=c.teamlevelid and baselowno =  e.baselowno ) teamlevelid,
+	       d.comcname comname,
+	       c.teamcode,
+	       c.teamname,
+	       sauser.persontype
+	  FROM sauser, sateamuserrela B, sateam c, sacompany d, baselow2com e
+	 WHERE sauser.usercode = B.usercode
+	   and b.teamcode = c.teamcode
+	   and c.comcode = d.comcode
+	   and d.comcode = e.comcode
+	   and nvl(B.Startdate, to_date(#{calcdate}, 'yyyy-mm-dd')) <![CDATA[  < ]]> =
+	       to_date(#{calcdate}, 'yyyy-mm-dd')
+	   and (B.Enddate <![CDATA[  > ]]>=  to_date(#{calcdate}, 'yyyy-mm-dd') or
+	       B.Enddate is null)
+	   and not exists
+	 (select 1
+	          from sateamuserrela BB
+	         where B.usercode = BB.usercode(+)
+	           and B.Startdate <![CDATA[  < ]]> BB.startdate
+	           and BB.Startdate <![CDATA[  < ]]> = (to_date(#{calcdate}, 'yyyy-mm-dd')))  
+	 and sauser.virtualuserflag='0'
+     <if test="comcode != null and comcode != ''">
+       and d.comcode in (select comcode
+                       from SaCompany
+                      start with comcode = #{comcode}
+                     connect by prior comcode = uppercomcode
+                            and prior comcode != comcode
+                            and validstatus = '1')
+     </if>
+   	<if test="teamcode != null and teamcode != ''">
+       and sauser.teamcode=  #{teamcode}
+     </if>   
+  	<if test="usercode != null and usercode != ''">
+       and sauser.usercode=  #{usercode}
+     </if>
+    <if test="persontype != null and persontype != ''">
+       and sauser.persontype=#{persontype}
+     </if>    
+  	<if test="userflag != null and userflag != ''">
+       and sauser.userflag=  #{userFlag}
+     </if>    
+     <if test="teamlevelid != null and teamlevelid != ''">
+       and sauser.teamlevelid #{teamlevelid}
+     </if>
+  </select>
+  <!-- 查询薪酬项 -->
+   <select id="selectvalueByindex" parameterType="com.sinosoft.commxg.param.XgWageParam" resultType="com.sinosoft.commxg.dto.XgWage">
+    select a.usercode ,a.indexno,a.calcdate,a.indexvalue from saindexresult a
+	 where a.usercode=  #{usercode}
+	 and a.indexno=  #{indexno}
+	 and a.calcdate = to_date(#{calcdate}, 'yyyy-mm-dd')
+	 
+  </select>
+</mapper>

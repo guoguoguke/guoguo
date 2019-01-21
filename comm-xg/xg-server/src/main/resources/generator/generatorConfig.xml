@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!--
+          使用说明：
+    1.修改location保证能加载到对应的Jar包
+    2.修改targetProject保证能找到对应路径
+    3.修改表配置添加需要生成的表
+    4.注意Table标签schema要填数据库用户
+    5.执行com.sinosoft.utils.mybatis包下的GenMyBatis类
+     -->
+	<!-- 数据库驱动包位置 -->
+	<classPathEntry location="D:\xxxt\repository\com\oracle\ojdbc14\6\ojdbc14-6.jar" />
+	<context id="mybatisgen" targetRuntime="MyBatis3">
+
+	    <!-- 指定生成的java文件的编码,没有直接生成到项目时中文可能会乱码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- 这里的type里写的是你的实现类的类全路径 -->
+        <commentGenerator type="com.sinosoft.commxg.utils.MyBatisComments">
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="false" />
+            <property name="suppressDate" value="false" />
+        </commentGenerator>
+
+		<!-- 数据库链接 -->
+		<jdbcConnection
+		     driverClass="oracle.jdbc.driver.OracleDriver"
+		     connectionURL="jdbc:oracle:thin:@10.1.0.138:1521:sales"
+		     userId="sales"
+		     password="sales">
+		     <!-- 针对oracle数据库 -->
+             <property name="remarksReporting" value="true"></property>
+             <!-- 针对mysql数据库 -->
+             <!--<property name="useInformationSchema" value="true"></property>-->
+		</jdbcConnection>
+
+		<!-- 类型转换 -->
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- dto -->
+		<javaModelGenerator targetPackage="com.sinosoft.commxg.dto" targetProject="D:\work\行销系统\代码\market\comm-xg\xg-server\src\main\java">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<!-- 表配置 -->
+		<table tableName="xg_performance" schema="sales"
+            enableCountByExample="true"
+            enableUpdateByExample="true"
+            enableDeleteByExample="true"
+            enableSelectByExample="true"
+            selectByExampleQueryId="true">
+        </table>
+	</context>
+</generatorConfiguration>

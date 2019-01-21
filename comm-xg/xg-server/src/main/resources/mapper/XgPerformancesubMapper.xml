@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.commxg.dao.XgPerformancesubMapper">
+  <resultMap id="XgPerformancesubMap" type="com.sinosoft.commxg.dto.XgPerformancesub">
+    <result column="COMCODE" jdbcType="VARCHAR" property="comcode" />
+    <result column="COMCNAME" jdbcType="VARCHAR" property="comcname" />
+    <result column="TEAMCODE" jdbcType="VARCHAR" property="teamcode" />
+    <result column="TEAMNAME" jdbcType="VARCHAR" property="teamname" />
+    <result column="HANDLER1CODE" jdbcType="VARCHAR" property="handler1code" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="POLICYNO" jdbcType="VARCHAR" property="policyno" />
+    <result column="CERTINO" jdbcType="VARCHAR" property="certino" />
+    <result column="RISKCODE" jdbcType="VARCHAR" property="riskcode" />
+    <result column="RISKCNAME" jdbcType="VARCHAR" property="riskcname" />
+    <result column="STARTDATE" jdbcType="TIMESTAMP" property="startdate" />
+    <result column="SIGNDATE" jdbcType="TIMESTAMP" property="signdate" />
+    <result column="PAYREFDATE" jdbcType="TIMESTAMP" property="payrefdate" />
+    <result column="PAYREFFEE" jdbcType="DECIMAL" property="payreffee" />
+    <result column="PERFORMANCERATE" jdbcType="DECIMAL" property="performancerate" />
+    <result column="PERFORMANCE" jdbcType="DECIMAL" property="performance" />
+    <result column="PERFORMANCE_ALL" jdbcType="DECIMAL" property="performanceAll" />
+    <result column="PERFORMANCE_FINAL" jdbcType="DECIMAL" property="performanceFinal" />
+    
+    <result column="PROJECTRATE" jdbcType="DECIMAL" property="projectrate" />
+    <result column="PROJECTVALUE" jdbcType="DECIMAL" property="projectvalue" />
+    <result column="PROJECTVALUE_ALL" jdbcType="DECIMAL" property="projectvalueAll" />
+    <result column="PROJECTVALUE_FINAL" jdbcType="DECIMAL" property="projectvalueFinal" />
+  </resultMap>
+<!-- 查询总绩效项目奖金 -->
+ <select id="selectByParam" parameterType="com.sinosoft.commxg.param.XgPerformancesubParam" resultMap="XgPerformancesubMap"> 
+  
+  select a.comcode,
+       (select comcname from sacompany c where a.comcode=c.comcode) comcname,
+       a.teamcode,
+       (select teamname from sateam d where a.teamcode=d.teamcode) teamname,
+       a.handler1code,
+       (select username from sauser b where a.handler1code=b.usercode) username,
+       a.policyno,
+       a.certino,
+       a.contractno,
+       a.riskcode,
+       (select riskcname from prpdrisk e where a.riskcode=e.riskcode ) riskcname,
+       a.startdate,
+       a.signdate,
+       a.payrefdate,
+       a.notaxpremium payreffee,
+       nvl(a.performancerate,0) performancerate,
+       nvl(a.performance,0) PERFORMANCE_ALL,
+       nvl(a.finalperformance,0) PERFORMANCE_FINAL,
+       nvl(a.performance-a.finalperformance,0) performance,
+       nvl(a.projectrate,0) projectrate,
+       nvl(a.projectvalue,0) PROJECTVALUE_ALL,
+       nvl(a.finalproject,0) PROJECTVALUE_FINAL,
+       nvl(a.projectvalue -a.finalproject,0) projectvalue
+  from sarealpayfee a
+ where 
+  trunc(greatest(a.startdate, a.payrefdate)) between to_date(#{startdate}, 'yyyy-mm-dd') and to_date(#{enddate}, 'yyyy-mm-dd')
+ and a.handler1code=#{usercode}
+ and (a.performance!=0 or a.projectvalue!=0)
+ <if test="contractno != null and contractno != ''">
+    and a.contractno=  #{contractno}
+  </if>
+  <if test="certino != null and certino != ''">
+    and a.certino=  #{certino}
+  </if>
+order by certino
+  </select>
+  
+<!-- 查询已结绩效项目奖金 -->
+ <select id="selectByParam1" parameterType="com.sinosoft.commxg.param.XgPerformancesubParam" resultMap="XgPerformancesubMap"> 
+  
+  select a.comcode,
+       (select comcname from sacompany c where a.comcode=c.comcode) comcname,
+       a.teamcode,
+       (select teamname from sateam d where a.teamcode=d.teamcode) teamname,
+       a.handler1code,
+       (select username from sauser b where a.handler1code=b.usercode) username,
+       a.policyno,
+       a.certino,
+       a.contractno,
+       a.riskcode,
+       (select riskcname from prpdrisk e where a.riskcode=e.riskcode ) riskcname,
+       a.startdate,
+       a.signdate,
+       a.payrefdate,
+       a.notaxpremium payreffee,
+       nvl(a.performancerate,0) performancerate,
+       nvl(a.performance,0) PERFORMANCE_ALL,
+       nvl(a.finalperformance,0) PERFORMANCE_FINAL,
+       nvl(a.performance-a.finalperformance,0) performance,
+       nvl(a.projectrate,0) projectrate,
+       nvl(a.projectvalue,0) PROJECTVALUE_ALL,
+       nvl(a.finalproject,0) PROJECTVALUE_FINAL,
+       nvl(a.projectvalue -a.finalproject,0) projectvalue
+  from sarealpayfee a
+ where 
+  trunc(greatest(a.startdate, a.payrefdate)) between to_date(#{startdate}, 'yyyy-mm-dd') and to_date(#{enddate}, 'yyyy-mm-dd')
+ and a.handler1code=#{usercode}
+ and (a.finalperformance!=0 or a.finalproject!=0)
+  <if test="contractno != null and contractno != ''">
+    and a.contractno=  #{contractno}
+  </if>
+  <if test="certino != null and certino != ''">
+    and a.certino=  #{certino}
+  </if>
+  order by certino
+  </select>
+  <!-- 查询待结绩效项目奖金 -->
+ <select id="selectByParam2" parameterType="com.sinosoft.commxg.param.XgPerformancesubParam" resultMap="XgPerformancesubMap"> 
+  
+  select a.comcode,
+       (select comcname from sacompany c where a.comcode=c.comcode) comcname,
+       a.teamcode,
+       (select teamname from sateam d where a.teamcode=d.teamcode) teamname,
+       a.handler1code,
+       (select username from sauser b where a.handler1code=b.usercode) username,
+       a.policyno,
+       a.certino,
+       a.contractno,
+       a.riskcode,
+       (select riskcname from prpdrisk e where a.riskcode=e.riskcode ) riskcname,
+       a.startdate,
+       a.signdate,
+       a.payrefdate,
+       a.notaxpremium payreffee,
+       nvl(a.performancerate,0) performancerate,
+       nvl(a.performance,0) PERFORMANCE_ALL,
+       nvl(a.finalperformance,0) PERFORMANCE_FINAL,
+       nvl(a.performance-a.finalperformance,0) performance,
+       nvl(a.projectrate,0) projectrate,
+       nvl(a.projectvalue,0) PROJECTVALUE_ALL,
+       nvl(a.finalproject,0) PROJECTVALUE_FINAL,
+       nvl(a.projectvalue -a.finalproject,0) projectvalue
+  from sarealpayfee a
+ where 
+  trunc(greatest(a.startdate, a.payrefdate)) <![CDATA[  < ]]>= to_date(#{enddate}, 'yyyy-mm-dd')
+ and a.handler1code=#{usercode}
+ and (a.performance-a.finalperformance!=0 or a.projectvalue-a.finalproject!=0)
+ <if test="contractno != null and contractno != ''">
+    and a.contractno=  #{contractno}
+  </if>
+  <if test="certino != null and certino != ''">
+    and a.certino=  #{certino}
+  </if>
+  order by certino
+  </select>
+</mapper>

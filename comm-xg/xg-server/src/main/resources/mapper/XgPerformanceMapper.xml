@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.commxg.dao.XgPerformanceMapper">
+  <resultMap id="XgPerformanceMap" type="com.sinosoft.commxg.dto.XgPerformance">
+    <result column="USERCODE" jdbcType="CHAR" property="usercode" />
+    <result column="USERNAME" jdbcType="CHAR" property="username" />
+    <result column="STARTDATE" jdbcType="CHAR" property="startdate" />
+    <result column="ENDDATE" jdbcType="CHAR" property="enddate" />
+    <result column="PERF_ALL" jdbcType="DECIMAL" property="perfAll" />
+    <result column="PROJ_ALL" jdbcType="DECIMAL" property="projAll" />
+    <result column="PERF_FINAL" jdbcType="DECIMAL" property="perfFinal" />
+    <result column="PROJ_FINAL" jdbcType="DECIMAL" property="projFinal" />
+    <result column="PERF" jdbcType="DECIMAL" property="perf" />
+    <result column="PROJ" jdbcType="DECIMAL" property="proj" />
+    <result column="FEE_ALL" jdbcType="DECIMAL" property="feeAll" />
+    <result column="FINAL_ALL" jdbcType="DECIMAL" property="finalAll" />
+    <result column="OTHER_ALL" jdbcType="DECIMAL" property="otherAll" />
+    
+  
+  </resultMap>
+<!-- 查询待结绩效项目奖金 -->
+ <select id="selectByParam" parameterType="com.sinosoft.commxg.param.XgPerformanceParam" resultMap="XgPerformanceMap"> 
+  
+   select sum(perf_all)+sum(proj_all) fee_all,sum(perf_final)+sum(proj_final) final_all, sum(perf)+sum(proj) other_all,
+   sum(perf_all) perf_all,sum(proj_all) proj_all,sum(perf_final) perf_final,sum(proj_final) proj_final,sum(perf) perf,sum(proj) proj from
+	(
+	select  nvl(sum(a.performance),0) perf_all,nvl(sum(a.projectvalue),0) proj_all, nvl(sum(a.finalperformance),0) perf_final ,nvl(sum(a.finalproject),0) proj_final,0 perf,0 proj
+	  from sarealpayfee a
+	 where trunc(greatest(a.startdate, a.payrefdate)) between to_date(#{startdate}, 'yyyy-mm-dd') and to_date(#{enddate}, 'yyyy-mm-dd')
+	 and a.handler1code= #{usercode}
+	union all
+	select  0 perf_all, 0 proj_all,0 perf_final,0 proj_final,nvl(sum(a.performance-a.finalperformance),0) perf,nvl(sum(a.projectvalue-a.finalproject),0) proj
+	  from sarealpayfee a
+	 where trunc(greatest(a.startdate, a.payrefdate)) <![CDATA[  < ]]>= to_date(#{enddate}, 'yyyy-mm-dd')
+	 and a.handler1code= #{usercode}
+	 and (a.performance-a.finalperformance!=0 or a.projectvalue-a.finalproject!=0)
+	)
+ 
+  </select>
+</mapper>

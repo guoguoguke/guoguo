@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.sinosoft.commxg.CommCoalApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 54.356 s - in com.sinosoft.commxg.CommCoalApplicationTests

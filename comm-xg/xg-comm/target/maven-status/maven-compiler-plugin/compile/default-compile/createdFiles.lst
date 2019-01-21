@@ -1,0 +1,7 @@
+com\sinosoft\commxg\param\XgAgentParam.class
+com\sinosoft\commxg\param\XgUserParam.class
+com\sinosoft\commxg\param\XgPerformanceParam.class
+com\sinosoft\commxg\vo\ResultVo.class
+com\sinosoft\commxg\dto\PageDto.class
+com\sinosoft\commxg\param\XgPerformancesubParam.class
+com\sinosoft\commxg\param\XgWageParam.class

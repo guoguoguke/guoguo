@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.sinosoft</groupId>
+	<artifactId>comm-xg</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<modules>
+		<module>xg-server</module>
+		<module>xg-comm</module>
+		<module>xg-api</module>
+	</modules>
+	<packaging>pom</packaging>
+
+	<name>comm-xg</name>
+	<description>xg project</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.2.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+		<xg-comm.version>0.0.1-SNAPSHOT</xg-comm.version>
+		<ojdbc14.version>6</ojdbc14.version>
+		<durid.version>1.1.10</durid.version>
+		<mybatis.version>1.3.1</mybatis.version>
+		<pagehelper.version>5.1.2</pagehelper.version>
+		<generator.version>1.3.6</generator.version>
+		<guava.version>2.9.5</guava.version>
+		<swagger2.version>2.6.1</swagger2.version>
+		<swagger-ui.version>2.6.1</swagger-ui.version>
+		<swagger2markup.version>1.3.1</swagger2markup.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.sinosoft</groupId>
+				<artifactId>xg-comm</artifactId>
+				<version>${xg-comm.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.oracle</groupId>
+				<artifactId>ojdbc14</artifactId>
+				<version>${ojdbc14.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${durid.version}</version>
+			</dependency>
+			<!-- mybatis -->
+			<dependency>
+				<groupId>org.mybatis.spring.boot</groupId>
+				<artifactId>mybatis-spring-boot-starter</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<!--pagehelper -->
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper</artifactId>
+				<version>${pagehelper.version}</version>
+			</dependency>
+			<!--mybatis配置文件生成工具 -->
+			<dependency>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-core</artifactId>
+				<version>${generator.version}</version>
+			</dependency>
+			<!-- json -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<!-- swagger2生成文档 -->
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger-ui</artifactId>
+				<version>${swagger-ui.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.github.swagger2markup</groupId>
+				<artifactId>swagger2markup</artifactId>
+				<version>${swagger2markup.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

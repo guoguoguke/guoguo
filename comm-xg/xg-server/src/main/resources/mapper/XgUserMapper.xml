@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinosoft.commxg.dao.XgUserMapper">
+  <resultMap id="XgUserResultMap" type="com.sinosoft.commxg.dto.XgUser">
+    <result column="USERCODE" jdbcType="VARCHAR" property="usercode" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="PERSONTYPE" jdbcType="VARCHAR" property="persontype" />
+    <result column="USERFLAG" jdbcType="VARCHAR" property="userflag" />
+    <result column="VIRTUALUSERFLAG" jdbcType="VARCHAR" property="virtualuserflag" />
+    <result column="ENROLLDATE" jdbcType="TIMESTAMP" property="enrolldate" />
+    <result column="VALIDSTATUS" jdbcType="VARCHAR" property="validstatus" />
+    <result column="LOGOUTDATE" jdbcType="TIMESTAMP" property="logoutdate" />
+    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="IDENTIFYNO" jdbcType="VARCHAR" property="identifyno" />
+    <result column="HOMEADDRESS" jdbcType="VARCHAR" property="homeaddress" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="IFMARRIED" jdbcType="VARCHAR" property="ifmarried" />
+    <result column="NATIONALITY" jdbcType="VARCHAR" property="nationality" />
+    <result column="POSITION" jdbcType="VARCHAR" property="position" />
+    <result column="PRIMARYEDUCATIONEXPERIENCE" jdbcType="VARCHAR" property="primaryeducationexperience" />
+    <result column="SEX" jdbcType="VARCHAR" property="sex" />
+    <result column="COMCODE" jdbcType="VARCHAR" property="comcode" />
+    <result column="COMCNAME" jdbcType="VARCHAR" property="comcname" />
+    <result column="TEAMCODE" jdbcType="VARCHAR" property="teamcode" />
+    <result column="TEAMNAME" jdbcType="VARCHAR" property="teamname" />
+    <result column="ROLEID" jdbcType="VARCHAR" property="roleid" />
+    <result column="ROLENAME" jdbcType="VARCHAR" property="rolename" />
+    <result column="LEVELID" jdbcType="VARCHAR" property="levelid" />
+    <result column="LEVELNAME" jdbcType="VARCHAR" property="levelname" />
+    <result column="BASEWAGE" jdbcType="VARCHAR" property="basewage" />
+    <result column="QUALITY" jdbcType="VARCHAR" property="quality" />
+    <result column="STARTDATE" jdbcType="TIMESTAMP" property="startdate" />
+    <result column="ENDDATE" jdbcType="TIMESTAMP" property="enddate" />
+  </resultMap>
+  
+  <select id="selectByParam" parameterType="com.sinosoft.commxg.param.XgUserParam" resultMap="XgUserResultMap">
+    select * from XG_USER a where 1=1 
+     <if test="comcode != null and comcode != ''">
+       and a.comcode  in (select comcode
+                     from SaCompany
+                    start with comcode = #{comcode}
+                   connect by prior comcode = uppercomcode
+                          and prior comcode != comcode)
+     </if>
+  	<if test="usercode != null and usercode != ''">
+       and a.usercode=  #{usercode}
+     </if>
+     <if test="username != null and username != ''">
+       and a.username like '%'||#{username}||'%'
+     </if>
+  	<if test="teamcode != null and teamcode != ''">
+       and a.teamcode=  #{teamcode}
+     </if>    
+    <if test="validstatus != null and validstatus != ''">
+       and a.validstatus=  #{validstatus}
+     </if>   
+     <if test="identifyno != null and identifyno != ''">
+       and a.identifyno=  #{identifyno}
+     </if>  
+     <if test="persontype != null and persontype != ''">
+       and a.persontype #{persontype}
+     </if>
+  	<if test="userflag != null and userflag != ''">
+       and a.userflag=  #{userflag}
+     </if>    
+    <if test="virtualuserflag != null and virtualuserflag != ''">
+       and a.virtualuserflag=  #{virtualuserflag}
+     </if>  
+  </select>
+ 
+</mapper>
+
